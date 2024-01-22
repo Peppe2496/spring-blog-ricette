@@ -1,6 +1,8 @@
 package org.learning.springblogricette.controller;
 
+
 import jakarta.validation.Valid;
+import org.learning.springblogricette.model.Category;
 import org.learning.springblogricette.model.Recipe;
 import org.learning.springblogricette.repository.CategoryRepository;
 import org.learning.springblogricette.repository.RecipeRepository;
@@ -27,7 +29,7 @@ public class RecipeController {
 
 
     @GetMapping
-    public String index(Model model){
+    public String index(Model model) {
         List<Recipe> recipeList = recipeRepository.findAll();
         model.addAttribute("recipeList", recipeList);
         return "recipes/list";
@@ -35,13 +37,13 @@ public class RecipeController {
 
 
     @GetMapping("/show/{id}")
-    public String show(@PathVariable Integer id, Model model){
+    public String show(@PathVariable Integer id, Model model) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
-        if (recipeOptional.isPresent()){
+        if (recipeOptional.isPresent()) {
             Recipe formRecipe = recipeOptional.get();
             model.addAttribute("formRecipe", formRecipe);
             return "recipes/detail";
-        }else {
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
@@ -49,9 +51,11 @@ public class RecipeController {
 
 
     @GetMapping("/create")
-    public String create(Model model){
+    public String create(Model model) {
         Recipe recipe = new Recipe();
+        List<Category> categoryList = categoryRepository.findAll();
         model.addAttribute("recipe", recipe);
+        model.addAttribute("categoryList", categoryList);
         return "recipes/create";
     }
 
@@ -60,44 +64,42 @@ public class RecipeController {
     public String store(@Valid @ModelAttribute("recipe") Recipe formRecipe, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("Recipe", recipeRepository.findAll());
+            model.addAttribute("categoryList", categoryRepository.findAll());
             return "recipes/create";
         }
         recipeRepository.save(formRecipe);
         return "redirect:/recipes";
     }
 
-    @GetMapping("/edit{id}")
-    public String update(@PathVariable Integer id, Model model){
+    @GetMapping("/edit/{id}")
+    public String update(@PathVariable Integer id, Model model) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
-        if (optionalRecipe.isPresent()){
+        if (optionalRecipe.isPresent()) {
             model.addAttribute("formRecipe", optionalRecipe.get());
+            model.addAttribute("categoryList", categoryRepository.findAll());
             return "recipes/edit";
-        }else {
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
     }
 
-    @PostMapping("/edit{id}")
-    public String store(@PathVariable Integer id, Model model, @Valid @ModelAttribute("recipe") Recipe formRecipe, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            model.addAttribute("Recipe", recipeRepository.findAll());
+    @PostMapping("/edit/{id}")
+    public String store(@PathVariable Integer id, Model model, @Valid @ModelAttribute("recipe") Recipe formRecipe, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categoryList", categoryRepository.findAll());
             return "recipes/edit";
         }
         recipeRepository.save(formRecipe);
         return "redirect:/recipes";
     }
 
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable Integer id) {
+        recipeRepository.deleteById(id);
+        return "redirect:/recipes";
 
-
-
-
-
-
-
-
-
-
+    }
 
 
 }

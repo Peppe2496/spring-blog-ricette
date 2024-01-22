@@ -34,6 +34,9 @@ public class Recipe {
     @NotEmpty
     private String description;
 
+    @ManyToOne
+    private Category category;
+
     public Integer getId() {
         return id;
     }
@@ -88,5 +91,13 @@ public class Recipe {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

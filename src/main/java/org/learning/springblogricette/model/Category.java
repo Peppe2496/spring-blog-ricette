@@ -2,6 +2,8 @@ package org.learning.springblogricette.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -10,6 +12,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @OneToMany(mappedBy = "category")
+    private List<Recipe> recipeList;
 
 
     public Integer getId() {
@@ -28,4 +32,11 @@ public class Category {
         this.name = name;
     }
 
+    public List<Recipe> getRecipeList() {
+        return recipeList;
+    }
+
+    public void setRecipeList(List<Recipe> recipeList) {
+        this.recipeList = recipeList;
+    }
 }

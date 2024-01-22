@@ -17,7 +17,7 @@
             id="create-recipe"
             method="post"
             th:object="${recipe}"
-            th:action="@{/recipe/create}"
+            th:action="@{/recipes/create}"
             class="row gy-3"
     >
         <div class="col-7">
@@ -77,6 +77,19 @@
             <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}">
                 <ul>
                     <li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="category">Categoria</label>
+            <select id="category" class="form-select" th:field="*{category}" th:errorClass="is-invalid">
+                <option value="">--Scegli un tipo--</option>
+                <option th:each="category : ${categoryList}" th:text="${category.name}"
+                        th:value="${category.id}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('category')}">
+                <ul>
+                    <li th:each="err : ${#fields.errors('category')}" th:text="${err}"></li>
                 </ul>
             </div>
         </div>

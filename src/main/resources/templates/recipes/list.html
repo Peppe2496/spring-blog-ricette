@@ -22,7 +22,14 @@
                 <h5 class="card-title" th:text="${rcpl.title}"></h5>
                 <p class="card-text" th:text="${rcpl.description}"></p>
                 <a th:href="@{/recipes/show/{id}(id =${rcpl.id})}" class="btn btn-primary">Dettagli</a>
-                <a href="@{/recipes/edit/{id}(id =${rcpl.id})}" class="btn btn-primary">Modifica</a>
+                <a th:href="@{/recipes/edit/{id}(id =${rcpl.id})}" class="btn btn-primary">Modifica</a>
+                <form th:action="@{/recipes/delete/{id}(id=${rcpl.id})}"
+                      method="post"
+                >
+                 <button type="submit" class="btn btn-danger">Cancella</button>
+
+                </form>
+
             </div>
         </div>
 
